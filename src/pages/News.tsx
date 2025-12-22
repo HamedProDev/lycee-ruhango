@@ -1,57 +1,46 @@
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Layout from "@/components/layout/Layout";
-import { Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import heroGraduation from "@/assets/hero-graduation.jpg";
-import heroStudents from "@/assets/hero-students.jpg";
+import { Calendar, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import heroCampus from "@/assets/hero-campus.jpg";
 
-const newsItems = [
-  {
-    date: "December 15, 2024",
-    title: "Annual Graduation Ceremony 2024",
-    excerpt: "Join us as we celebrate the achievements of our graduating class of 2024. The ceremony will be held on December 20th at the school auditorium.",
-    image: heroGraduation,
-    category: "Events",
-  },
-  {
-    date: "December 10, 2024",
-    title: "New Computer Lab Inauguration",
-    excerpt: "Our new state-of-the-art computer lab with 50 high-performance workstations is now open for students in the Computer Application program.",
-    image: heroStudents,
-    category: "News",
-  },
-  {
-    date: "November 28, 2024",
-    title: "Industry Partnership with RwandAir",
-    excerpt: "We're proud to announce a new partnership with RwandAir for internships and job placements for our Tourism and Hospitality students.",
-    image: heroCampus,
-    category: "Partnership",
-  },
-  {
-    date: "November 15, 2024",
-    title: "Skills Competition Winners",
-    excerpt: "Our Culinary Arts students won first place at the National TVET Skills Competition held in Kigali.",
-    image: heroGraduation,
-    category: "Achievement",
-  },
-  {
-    date: "October 30, 2024",
-    title: "Open Day Announcement",
-    excerpt: "Visit our campus during Open Day on November 15th. Explore facilities, meet teachers, and learn about our programs.",
-    image: heroCampus,
-    category: "Events",
-  },
-  {
-    date: "October 20, 2024",
-    title: "New Automotive Workshop Equipment",
-    excerpt: "The Automobile Technology department has received new diagnostic equipment and training vehicles from our industry partners.",
-    image: heroStudents,
-    category: "News",
-  },
-];
+interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string | null;
+  image_url: string | null;
+  published_at: string | null;
+  created_at: string;
+}
 
 const News = () => {
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .eq("published", true)
+          .order("published_at", { ascending: false });
+
+        if (error) throw error;
+        setNews(data || []);
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -73,33 +62,100 @@ const News = () => {
 
         <section className="py-20">
           <div className="container">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {newsItems.map((item, index) => (
-                <article key={index} className="bg-card rounded-xl overflow-hidden shadow-soft card-hover">
-                  <div className="relative h-52">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                    <span className="absolute top-4 left-4 bg-primary text-primary-foreground px-3 py-1 rounded text-xs font-medium">
-                      {item.category}
-                    </span>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                      <Calendar className="w-4 h-4" />
-                      {item.date}
+            {isLoading ? (
+              <div className="flex justify-center py-20">
+                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+              </div>
+            ) : news.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-xl text-muted-foreground">No news articles available at the moment.</p>
+                <p className="text-muted-foreground mt-2">Check back soon for updates!</p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {news.map((item) => (
+                  <article 
+                    key={item.id} 
+                    className="bg-card rounded-xl overflow-hidden shadow-soft card-hover cursor-pointer"
+                    onClick={() => setSelectedNews(item)}
+                  >
+                    <div className="relative h-52">
+                      <img 
+                        src={item.image_url || heroCampus} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover" 
+                      />
                     </div>
-                    <h3 className="text-lg font-bold font-poppins text-foreground mb-2 line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                      {item.excerpt}
-                    </p>
-                    <Button variant="secondary" size="sm">Read More</Button>
-                  </div>
-                </article>
-              ))}
-            </div>
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                        <Calendar className="w-4 h-4" />
+                        {new Date(item.published_at || item.created_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </div>
+                      <h3 className="text-lg font-bold font-poppins text-foreground mb-2 line-clamp-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
+                        {item.excerpt || item.content.substring(0, 150)}
+                      </p>
+                      <span className="text-primary font-medium text-sm hover:underline">
+                        Read More →
+                      </span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
         </section>
+
+        {/* News Detail Modal */}
+        {selectedNews && (
+          <div 
+            className="fixed inset-0 bg-foreground/80 z-50 flex items-center justify-center p-4"
+            onClick={() => setSelectedNews(null)}
+          >
+            <div 
+              className="bg-card rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {selectedNews.image_url && (
+                <img 
+                  src={selectedNews.image_url} 
+                  alt={selectedNews.title} 
+                  className="w-full h-64 object-cover"
+                />
+              )}
+              <div className="p-6 md:p-8">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                  <Calendar className="w-4 h-4" />
+                  {new Date(selectedNews.published_at || selectedNews.created_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold font-poppins text-foreground mb-6">
+                  {selectedNews.title}
+                </h2>
+                <div className="prose prose-sm max-w-none text-foreground">
+                  {selectedNews.content.split('\n').map((paragraph, index) => (
+                    <p key={index} className="mb-4">{paragraph}</p>
+                  ))}
+                </div>
+                <button 
+                  className="mt-8 text-primary font-medium hover:underline"
+                  onClick={() => setSelectedNews(null)}
+                >
+                  ← Back to News
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </Layout>
     </>
   );

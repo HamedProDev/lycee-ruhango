@@ -5,6 +5,7 @@ import QuickLinks from "@/components/home/QuickLinks";
 import WelcomeSection from "@/components/home/WelcomeSection";
 import ProgramsSection from "@/components/home/ProgramsSection";
 import StatsSection from "@/components/home/StatsSection";
+import LatestNews from "@/components/home/LatestNews";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
         <QuickLinks />
         <WelcomeSection />
         <ProgramsSection />
+        <LatestNews />
         <StatsSection />
       </Layout>
     </>
