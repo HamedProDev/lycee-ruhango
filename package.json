@@ -81,5 +81,18 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19"
-  }
+  },
+  "description": "",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamedProDev/lycee-ruhango.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HamedProDev/lycee-ruhango/issues"
+  },
+  "homepage": "https://github.com/HamedProDev/lycee-ruhango#readme"
 }
