@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          address: string | null
+          created_at: string
+          date_of_birth: string
+          email: string
+          first_name: string
+          gender: string
+          id: string
+          last_name: string
+          level: string
+          parent_name: string | null
+          parent_phone: string | null
+          phone: string
+          previous_school: string | null
+          program: string
+          school_report_url: string | null
+          statement: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          date_of_birth: string
+          email: string
+          first_name: string
+          gender: string
+          id?: string
+          last_name: string
+          level: string
+          parent_name?: string | null
+          parent_phone?: string | null
+          phone: string
+          previous_school?: string | null
+          program: string
+          school_report_url?: string | null
+          statement?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          date_of_birth?: string
+          email?: string
+          first_name?: string
+          gender?: string
+          id?: string
+          last_name?: string
+          level?: string
+          parent_name?: string | null
+          parent_phone?: string | null
+          phone?: string
+          previous_school?: string | null
+          program?: string
+          school_report_url?: string | null
+          statement?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           author_id: string | null
@@ -74,6 +137,72 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      programs: {
+        Row: {
+          careers: string[]
+          created_at: string
+          description: string
+          display_order: number
+          duration: string
+          id: string
+          image_url: string | null
+          is_active: boolean
+          levels: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          careers?: string[]
+          created_at?: string
+          description: string
+          display_order?: number
+          duration: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          levels: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          careers?: string[]
+          created_at?: string
+          description?: string
+          display_order?: number
+          duration?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          levels?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      settings: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }

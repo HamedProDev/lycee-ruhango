@@ -11,8 +11,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import NewsManagement from "@/components/admin/NewsManagement";
 import ApplicationsManagement from "@/components/admin/ApplicationsManagement";
+import ProgramsManagement from "@/components/admin/ProgramsManagement";
+import SettingsManagement from "@/components/admin/SettingsManagement";
 
-type AdminView = "applications" | "news";
+type AdminView = "applications" | "news" | "programs" | "settings";
 
 const Admin = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -23,6 +25,16 @@ const Admin = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate("/admin-login");
+  };
+
+  const getPageTitle = () => {
+    switch (activeView) {
+      case "applications": return "Student Applications";
+      case "news": return "News Management";
+      case "programs": return "Programs Management";
+      case "settings": return "Settings";
+      default: return "Dashboard";
+    }
   };
 
   return (
@@ -60,11 +72,19 @@ const Admin = () => {
               <Newspaper className="w-5 h-5" />
               {sidebarOpen && "News"}
             </Button>
-            <Button variant="ghost" className="w-full justify-start gap-3" disabled>
+            <Button 
+              variant={activeView === "programs" ? "secondary" : "ghost"} 
+              className="w-full justify-start gap-3"
+              onClick={() => setActiveView("programs")}
+            >
               <GraduationCap className="w-5 h-5" />
               {sidebarOpen && "Programs"}
             </Button>
-            <Button variant="ghost" className="w-full justify-start gap-3" disabled>
+            <Button 
+              variant={activeView === "settings" ? "secondary" : "ghost"} 
+              className="w-full justify-start gap-3"
+              onClick={() => setActiveView("settings")}
+            >
               <Settings className="w-5 h-5" />
               {sidebarOpen && "Settings"}
             </Button>
@@ -97,7 +117,7 @@ const Admin = () => {
                 <Menu className="w-5 h-5" />
               </Button>
               <h1 className="text-xl font-bold font-poppins text-foreground">
-                {activeView === "applications" ? "Student Applications" : "News Management"}
+                {getPageTitle()}
               </h1>
             </div>
             <div className="flex items-center gap-2">
@@ -115,6 +135,8 @@ const Admin = () => {
           <main className="p-4 lg:p-8">
             {activeView === "applications" && <ApplicationsManagement />}
             {activeView === "news" && <NewsManagement />}
+            {activeView === "programs" && <ProgramsManagement />}
+            {activeView === "settings" && <SettingsManagement />}
           </main>
         </div>
       </div>
