@@ -2,15 +2,30 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? '';
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
+
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  // Don't throw during build; warn so deploy environments can be fixed.
+  // At runtime the client will still be created (with empty values) which
+  // will fail API calls clearly in the browser.
+  // Ensure your hosting environment sets `VITE_SUPABASE_URL` and
+  // `VITE_SUPABASE_PUBLISHABLE_KEY` (Vite prefix required).
+  // Example `.env` entries:
+  // VITE_SUPABASE_URL=https://xyz.supabase.co
+  // VITE_SUPABASE_PUBLISHABLE_KEY=public-anon-key
+  // eslint-disable-next-line no-console
+  console.warn('Supabase env vars are missing: VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY');
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+    // Guard access to `localStorage` so this module can be imported during
+    // SSR/build without throwing `localStorage is not defined`.
+    storage: typeof window !== 'undefined' ? localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
   }
