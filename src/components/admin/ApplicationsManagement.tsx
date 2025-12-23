@@ -64,7 +64,7 @@ const ApplicationsManagement = () => {
     } else {
       // Demo data
       const demoApps: Application[] = [
-        { id: 1, firstName: "Jean", lastName: "Mugabo", email: "jean@email.com", phone: "+250788123456", program: "Computer Application", level: "level4", status: "pending", submittedAt: "2024-12-15T10:30:00Z" },
+        { id: 1, firstName: "Hamed", lastName: "Hussein", email: "hamed@email.com", phone: "+250789025686", program: "Computer Application", level: "level4", status: "pending", submittedAt: "2024-12-15T10:30:00Z" },
         { id: 2, firstName: "Marie", lastName: "Uwamahoro", email: "marie@email.com", phone: "+250788234567", program: "Culinary Arts", level: "level3", status: "approved", submittedAt: "2024-12-14T14:20:00Z" },
         { id: 3, firstName: "Emmanuel", lastName: "Habimana", email: "emmanuel@email.com", phone: "+250788345678", program: "Automobile Technology", level: "level5", status: "pending", submittedAt: "2024-12-13T09:15:00Z" },
         { id: 4, firstName: "Diane", lastName: "Ingabire", email: "diane@email.com", phone: "+250788456789", program: "Tailoring & Fashion Design", level: "level3", status: "rejected", submittedAt: "2024-12-12T16:45:00Z" },
