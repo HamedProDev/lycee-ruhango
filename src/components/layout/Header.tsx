@@ -76,7 +76,7 @@ const Header = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <img src={schoolLogo} alt="Lycée de Ruhango Logo" className="h-14 md:h-16 w-auto" />
+            <img src={schoolLogo} alt="Lycée de Ruhango Logo" loading="lazy" className="h-14 md:h-16 w-auto" />
             <div className="hidden sm:block">
               <h1 className="text-lg md:text-xl font-bold text-primary leading-tight font-poppins">
                 Lycée de Ruhango Ikirezi TSS

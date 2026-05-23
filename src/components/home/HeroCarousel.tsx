@@ -53,6 +53,7 @@ const HeroCarousel = () => {
           <img
             src={slide.image}
             alt={slide.title}
+            loading="lazy"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent" />
