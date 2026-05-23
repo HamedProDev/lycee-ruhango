@@ -14,7 +14,7 @@ const Footer = () => {
           {/* About Column */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <img src={schoolLogo} alt="School Logo" className="h-12 w-auto brightness-0 invert" />
+              <img src={schoolLogo} alt="School Logo" loading="lazy" className="h-12 w-auto brightness-0 invert" />
               <div>
                 <h3 className="font-poppins font-semibold text-lg">Lycée de Ruhango</h3>
                 <p className="text-sm text-background/70">Ikirezi TSS</p>
